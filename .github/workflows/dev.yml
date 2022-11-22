@@ -1,0 +1,22 @@
+name: Dev
+
+on:
+  push:
+    branches:
+      - dev
+
+concurrency:
+  group: deploy-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  setup:
+    uses: ./.github/workflows/setup.yml
+
+  lint:
+    needs: setup
+    uses: ./.github/workflows/lint.yml
+
+  test:
+    needs: setup
+    uses: ./.github/workflows/test.yml

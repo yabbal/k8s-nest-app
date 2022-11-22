@@ -1,0 +1,30 @@
+name: Setup
+
+on: workflow_call
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - uses: pnpm/action-setup@v2.2.4
+        with:
+          version: 7
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: lts/*
+          cache: 'pnpm'
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        id: pnpm-cache
+        with:
+          path: '**/node_modules'
+          key: cache-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      - name: Install packages
+        if: steps.pnpm-cache.outputs.cache-hit != 'true'
+        run: SKIP_POSTINSTALL=1 pnpm install --frozen-lockfile

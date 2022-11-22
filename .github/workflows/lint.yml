@@ -1,0 +1,16 @@
+name: Lint
+
+on: workflow_call
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: cache-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      - run: npm run lint --quiet
