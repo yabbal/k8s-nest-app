@@ -30,5 +30,4 @@ jobs:
         with:
           context: .
           push: true
-          repository: ${{ secrets.DOCKERHUB_USERNAME }}/k8s-nest-app
-          tags: ${{ github.sha }}, latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/k8s-nest-app:${{ github.sha }}, latest
