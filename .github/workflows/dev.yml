@@ -18,5 +18,14 @@ jobs:
     uses: ./.github/workflows/lint.yml
 
   test:
-    needs: lint
+    needs: setup
     uses: ./.github/workflows/test.yml
+
+  build:
+    needs: [test, lint]
+    uses: ./.github/workflows/build.yml
+
+  docker-build-push:
+    needs: build
+    uses: ./.github/workflows/docker-build-push.yml
+    secrets: inherit

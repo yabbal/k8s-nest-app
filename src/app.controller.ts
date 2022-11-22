@@ -12,7 +12,6 @@ export class AppController {
 
   @Get('version')
   getVersion(): string {
-    var a = 1;
     return this.appService.getVersion();
   }
 }

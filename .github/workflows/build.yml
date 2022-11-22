@@ -1,0 +1,25 @@
+name: Build
+
+on: workflow_call
+
+env:
+  COMMITHASH: ${{ github.sha }}
+  BRANCH: ${{ github.ref_name }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: cache-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      - uses: actions/cache@v3
+        with:
+          path: '**/build'
+          key: cache-build-${{github.sha}}
+
+      - run: npm run build
