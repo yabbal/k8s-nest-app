@@ -21,7 +21,7 @@ describe('AppController', () => {
     });
 
     it('should return "Hello World!"', () => {
-      expect(appController.getVersion()).toBe(version + 1);
+      expect(appController.getVersion()).toBe(version);
     });
   });
 });
