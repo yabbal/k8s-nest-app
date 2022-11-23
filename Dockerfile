@@ -1,6 +1,6 @@
-###################
-# BUILD FOR BASE
-###################
+########
+# BASE #
+########
 
 FROM node:lts-alpine AS base
 
@@ -10,35 +10,16 @@ RUN npm --global install pnpm@${PNPM_VERSION}
 
 WORKDIR /usr/src/app
 
-###################
-# BUILD FOR LOCAL DEVELOPMENT
-###################
+################
+# DEPENDENCIES #
+################
 
-FROM base As development
-
-COPY --chown=node:node package.json pnpm-lock.yaml ./
-
-RUN SKIP_POSTINSTALL=1 pnpm install --frozen-lockfile
-
-COPY --chown=node:node . .
-
-USER node
-
-###################
-# BUILD FOR PRODUCTION
-###################
-
-FROM base As build
+FROM base As dependencies
 
 ENV CI=1
 
 COPY --chown=node:node package.json pnpm-lock.yaml ./
-
-COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modules
-
-COPY --chown=node:node . .
-
-RUN pnpm run build
+COPY --chown=node:node build ./build
 
 ENV NODE_ENV production
 
@@ -50,11 +31,13 @@ USER node
 # PRODUCTION
 ###################
 
-FROM base As production
+FROM node:lts-alpine As production
 
-COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
-COPY --chown=node:node --from=build /usr/src/app/dist ./dist
+WORKDIR /usr/src/app
+
+COPY --chown=node:node --from=dependencies /usr/src/app/node_modules ./node_modules
+COPY --chown=node:node --from=dependencies /usr/src/app/build ./build
 
 EXPOSE 3000
 
-CMD [ "node", "dist/src/main.js" ]
+CMD [ "node", "build/src/main.js" ]

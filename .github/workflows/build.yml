@@ -1,9 +1,13 @@
-name: Test
+name: Build
 
 on: workflow_call
 
+env:
+  COMMITHASH: ${{ github.sha }}
+  BRANCH: ${{ github.ref_name }}
+
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -13,4 +17,9 @@ jobs:
           path: '**/node_modules'
           key: cache-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
 
-      - run: npm run test
+      - uses: actions/cache@v3
+        with:
+          path: '**/build'
+          key: cache-build-${{github.sha}}
+
+      - run: npm run build
