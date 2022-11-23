@@ -13,6 +13,12 @@ jobs:
           path: '**/build'
           key: cache-build-${{ github.sha }}
 
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/k8s-nest-app
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
@@ -30,6 +36,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: | 
-            ${{ secrets.DOCKERHUB_USERNAME }}/k8s-nest-app:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/k8s-nest-app:${{ github.sha }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
