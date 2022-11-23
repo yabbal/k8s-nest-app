@@ -71,6 +71,10 @@
     "testEnvironment": "node"
   },
   "release-it": {
+    "git": {
+      "commitMessage": "chore(release): tags v${version}",
+      "tagName": "v${version}"
+    },
     "github": {
       "release": true
     }
