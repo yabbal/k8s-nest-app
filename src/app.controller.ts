@@ -14,4 +14,9 @@ export class AppController {
   getVersion(): string {
     return this.appService.getVersion();
   }
+
+  @Get('/bye')
+  getBye(): string {
+    return this.appService.getBye();
+  }
 }
