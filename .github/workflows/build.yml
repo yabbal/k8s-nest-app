@@ -2,10 +2,6 @@ name: Build
 
 on: workflow_call
 
-env:
-  COMMITHASH: ${{ github.sha }}
-  BRANCH: ${{ github.ref_name }}
-
 jobs:
   build:
     runs-on: ubuntu-latest
