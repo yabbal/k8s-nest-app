@@ -10,4 +10,8 @@ export class AppService {
   getVersion(): string {
     return version;
   }
+
+  getBye(): string {
+    return 'Bye Bye!';
+  }
 }
