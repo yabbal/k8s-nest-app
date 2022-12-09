@@ -35,8 +35,7 @@ FROM node:lts-alpine As production
 
 WORKDIR /usr/src/app
 
-COPY --chown=node:node --from=dependencies /usr/src/app/node_modules ./node_modules
-COPY --chown=node:node --from=dependencies /usr/src/app/build ./build
+COPY --chown=node:node --from=dependencies /usr/src/app/ ./
 
 EXPOSE 3000
 
