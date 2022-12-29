@@ -37,6 +37,6 @@ WORKDIR /usr/src/app
 
 COPY --chown=node:node --from=dependencies /usr/src/app/ ./
 
-EXPOSE 3000
+EXPOSE 8080
 
 CMD [ "node", "build/src/main.js" ]
