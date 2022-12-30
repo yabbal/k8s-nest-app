@@ -36,6 +36,7 @@ jobs:
       environment: dev
 
   deploy:
+    if: github.ref_name == 'develop'
     needs: docker-build-push
     uses: ./.github/workflows/deploy.yml
     secrets: inherit
