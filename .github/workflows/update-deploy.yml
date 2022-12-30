@@ -1,0 +1,55 @@
+name: Update Deployment repository
+
+on:
+  workflow_call:
+    inputs:
+      deploy_target:
+        required: true
+        type: string
+      environment:
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: yabbal/k8s-nest-app
+          tags: |
+            ${{ inputs.environment == 'dev' && github.event_name == 'pull_request' && 'type=ref,event=pr' || inputs.environment == 'dev' && 'type=sha' || 
+              'type=ref,event=branch
+              type=semver,pattern={{version}}
+              type=semver,pattern={{major}}.{{minor}}' }}
+
+      - name: Checkout deployment repo
+        uses: actions/checkout@v3
+        with:
+          repository: yabbal/k8s-nest-deployment
+          ref: main
+          path: deployment
+          token: ${{ secrets.PAT }}
+
+      - name: Install kustomize
+        uses: imranismail/setup-kustomize@v2
+
+      - name: Update deployed version
+        run: |
+          (cd deployment/overlays/${{ inputs.deploy_target }}/ && kustomize edit set image "nest-app=${{ steps.meta.outputs.tags }}")
+
+      - name: Push changes to deployment repo
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          # Temporarily use the personal token
+          API_TOKEN_GITHUB: ${{ secrets.PAT }}
+        with:
+          source-directory: deployment
+          user-name: 'github-actions[bot]'
+          user-email: 'github-actions[bot]@users.noreply.github.com'
+          destination-github-username: yabbal
+          destination-repository-name: k8s-nest-deployment
+          commit-message: Set `${{ inputs.deploy_target }}` image tag to `${{ steps.meta.outputs.tags }}`
+          target-branch: main

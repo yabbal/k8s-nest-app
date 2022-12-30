@@ -3,13 +3,10 @@ name: CI
 on:
   push:
     branches:
-      - main
       - develop
-    tags:
-      - 'v*'
   pull_request:
     branches:
-      - main
+      - develop
 
 concurrency:
   group: ci-${{ github.ref_name }}
@@ -35,3 +32,12 @@ jobs:
     needs: build
     uses: ./.github/workflows/docker-build-push.yml
     secrets: inherit
+    with:
+      environment: dev
+
+  deploy:
+    needs: docker-build-push
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit
+    with:
+      environment: dev

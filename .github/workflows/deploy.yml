@@ -1,0 +1,15 @@
+name: Deploy
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+jobs:
+  deploy:
+    uses: ./.github/workflows/update-deploy.yml
+    secrets: inherit
+    with:
+      deploy_target: ${{ inputs.environment == 'dev' && github.ref_name == 'develop' && 'dev' || 'prod' }}
+      environment: ${{ inputs.environment }}
