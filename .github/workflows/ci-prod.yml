@@ -29,8 +29,12 @@ jobs:
     needs: build
     uses: ./.github/workflows/docker-build-push.yml
     secrets: inherit
+    with:
+      environment: prod
 
   deploy:
     needs: docker-build-push
     uses: ./.github/workflows/deploy.yml
     secrets: inherit
+    with:
+      environment: dev
