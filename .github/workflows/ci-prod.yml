@@ -1,40 +1,40 @@
-name: CI
+# name: CI
 
-on:
-  push:
-    # tags:
-    #   - '*'
+# on:
+#   push:
+#     # tags:
+#     #   - '*'
 
-concurrency:
-  group: ci-${{ github.ref_name }}
-  cancel-in-progress: true
+# concurrency:
+#   group: ci-${{ github.ref_name }}
+#   cancel-in-progress: true
 
-jobs:
-  setup:
-    uses: ./.github/workflows/setup.yml
+# jobs:
+#   setup:
+#     uses: ./.github/workflows/setup.yml
 
-  lint:
-    needs: setup
-    uses: ./.github/workflows/lint.yml
+#   lint:
+#     needs: setup
+#     uses: ./.github/workflows/lint.yml
 
-  test:
-    needs: setup
-    uses: ./.github/workflows/test.yml
+#   test:
+#     needs: setup
+#     uses: ./.github/workflows/test.yml
 
-  build:
-    needs: [test, lint]
-    uses: ./.github/workflows/build.yml
+#   build:
+#     needs: [test, lint]
+#     uses: ./.github/workflows/build.yml
 
-  docker-build-push:
-    needs: build
-    uses: ./.github/workflows/docker-build-push.yml
-    secrets: inherit
-    with:
-      environment: prod
+#   docker-build-push:
+#     needs: build
+#     uses: ./.github/workflows/docker-build-push.yml
+#     secrets: inherit
+#     with:
+#       environment: prod
 
-  deploy:
-    needs: docker-build-push
-    uses: ./.github/workflows/deploy.yml
-    secrets: inherit
-    with:
-      environment: prod
+#   deploy:
+#     needs: docker-build-push
+#     uses: ./.github/workflows/deploy.yml
+#     secrets: inherit
+#     with:
+#       environment: prod
