@@ -9,6 +9,8 @@ on:
       environment:
         required: true
         type: string
+env:
+  ECR_REPOSITORY: yabbal/k8s-nest-app
 
 jobs:
   deploy:
@@ -18,7 +20,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: yabbal/k8s-nest-app
+          images: ${{ env.ECR_REPOSITORY }}
           tags: |
             ${{ inputs.environment == 'dev' && github.event_name == 'pull_request' && 'type=ref,event=pr' || inputs.environment == 'dev' && 'type=sha' || 'type=semver,pattern={{version}}' }}
 
@@ -35,7 +37,7 @@ jobs:
 
       - name: Update deployed version
         run: |
-          (cd deployment/overlays/${{ inputs.deploy_target }}/ && kustomize edit set image "nest-app=yabbal/k8s-nest-app:${{ steps.meta.outputs.version}}")
+          (cd deployment/overlays/${{ inputs.deploy_target }}/ && kustomize edit set image "nest-app=${{ env.ECR_REPOSITORY }}:${{ steps.meta.outputs.version}}")
 
       - name: Push changes to deployment repo
         uses: cpina/github-action-push-to-another-repository@main
@@ -48,5 +50,5 @@ jobs:
           user-email: 'github-actions[bot]@users.noreply.github.com'
           destination-github-username: yabbal
           destination-repository-name: k8s-nest-deployment
-          commit-message: Set `${{ inputs.deploy_target }}` image tag to `yabbal/k8s-nest-app:${{ steps.meta.outputs.version}}`
+          commit-message: Set `${{ inputs.deploy_target }}` image tag to `${{ env.ECR_REPOSITORY }}:${{ steps.meta.outputs.version}}`
           target-branch: main
