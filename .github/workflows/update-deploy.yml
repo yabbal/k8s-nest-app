@@ -20,7 +20,7 @@ jobs:
         with:
           images: yabbal/k8s-nest-app
           tags: |
-            ${{ inputs.environment == 'dev' && github.event_name == 'pull_request' && 'type=ref,event=pr' || inputs.environment == 'dev' && 'type=sha' || 'type=pep440,pattern={{major}}.{{minor}}.{{patch}}' }}
+            ${{ inputs.environment == 'dev' && github.event_name == 'pull_request' && 'type=ref,event=pr' || inputs.environment == 'dev' && 'type=sha' || 'type=semver,pattern={{version}}' }}
 
       - name: Checkout deployment repo
         uses: actions/checkout@v3
@@ -35,7 +35,7 @@ jobs:
 
       - name: Update deployed version
         run: |
-          (cd deployment/overlays/${{ inputs.deploy_target }}/ && kustomize edit set image "nest-app=${{ steps.meta.outputs.tags }}")
+          (cd deployment/overlays/${{ inputs.deploy_target }}/ && kustomize edit set image "nest-app=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}")
 
       - name: Push changes to deployment repo
         uses: cpina/github-action-push-to-another-repository@main
@@ -48,5 +48,5 @@ jobs:
           user-email: 'github-actions[bot]@users.noreply.github.com'
           destination-github-username: yabbal
           destination-repository-name: k8s-nest-deployment
-          commit-message: Set `${{ inputs.deploy_target }}` image tag to `${{ steps.meta.outputs.tags }}`
+          commit-message: Set `${{ inputs.deploy_target }}` image tag to `${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}`
           target-branch: main
