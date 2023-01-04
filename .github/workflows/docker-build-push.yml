@@ -24,10 +24,7 @@ jobs:
         with:
           images: yabbal/k8s-nest-app
           tags: |
-            ${{ inputs.environment == 'dev' && github.event_name == 'pull_request' && 'type=ref,event=pr' || inputs.environment == 'dev' && 'type=sha' || 
-              type=ref,event=branch
-              type=semver,pattern={{version}}
-              type=semver,pattern={{major}}.{{minor}} }}
+            ${{ inputs.environment == 'dev' && github.event_name == 'pull_request' && 'type=ref,event=pr' || inputs.environment == 'dev' && 'type=sha' || 'type=semver,pattern={{version}}' }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
