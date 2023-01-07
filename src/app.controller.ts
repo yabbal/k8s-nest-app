@@ -19,4 +19,9 @@ export class AppController {
   getBye(): string {
     return this.appService.getBye();
   }
+
+  @Get('/some')
+  getSomething(): string {
+    return 'Something';
+  }
 }
