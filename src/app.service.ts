@@ -4,7 +4,7 @@ import { version } from '../package.json';
 @Injectable()
 export class AppService {
   getHello(): string {
-    return 'Hello Worlds!';
+    return 'Hello World!';
   }
 
   getVersion(): string {

@@ -9,6 +9,7 @@ on:
       environment:
         required: true
         type: string
+
 env:
   ECR_REPOSITORY: yabbal/k8s-nest-app
 
@@ -19,10 +20,12 @@ jobs:
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v4
+        env:
+          DOCKER_METADATA_PR_HEAD_SHA: true
         with:
           images: ${{ env.ECR_REPOSITORY }}
           tags: |
-            ${{ inputs.environment == 'dev' && github.event_name == 'pull_request' && 'type=ref,event=pr' || inputs.environment == 'dev' && 'type=sha' || 'type=semver,pattern={{version}}' }}
+            ${{ inputs.environment == 'dev' && 'type=sha,prefix=,format=long' || 'type=semver,pattern={{version}}' }}
 
       - name: Checkout deployment repo
         uses: actions/checkout@v3
