@@ -27,7 +27,7 @@ jobs:
         with:
           images: ${{ env.ECR_REPOSITORY }}
           tags: |
-            ${{ inputs.environment == 'dev' && github.event_name == 'pull_request' && 'type=ref,event=pr' || inputs.environment == 'dev' && 'type=sha' || 'type=semver,pattern={{version}}' }}
+            ${{ inputs.environment == 'dev' && 'type=sha' || 'type=semver,pattern={{version}}' }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
