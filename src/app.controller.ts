@@ -22,6 +22,6 @@ export class AppController {
 
   @Get('/some')
   getSomething(): string {
-    return 'Something';
+    return 'Somethings';
   }
 }
