@@ -1,0 +1,12 @@
+name: Update Deployment repository
+
+on:
+  workflow_call:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo version
+        run: |
+          echo hello
