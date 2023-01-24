@@ -9,4 +9,4 @@ on:
 jobs:
   staging:
     if: 'github.event.pull_request.merged == true'
-    uses: ./.github/workflows/bump-and-push.yml
+    uses: ./.github/workflows/bump-push.yml
