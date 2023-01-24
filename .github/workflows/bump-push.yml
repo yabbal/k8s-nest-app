@@ -22,8 +22,11 @@ jobs:
       - name: Apply version bump (minor)
         run: 'npm version minor -m "release: %s"'
 
-      - name: Git push version bump
-        run: git push
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.PAT }}
+          branch: develop
 
       - id: set-version
         name: Output version change
