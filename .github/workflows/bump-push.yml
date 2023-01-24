@@ -22,19 +22,8 @@ jobs:
       - name: Apply version bump (minor)
         run: 'npm version minor -m "release: %s"'
 
-      - name: Push changes to deployment repo
-        uses: cpina/github-action-push-to-another-repository@main
-        env:
-          # Temporarily use the personal token
-          API_TOKEN_GITHUB: ${{ secrets.PAT }}
-        with:
-          source-directory: k8s-nest-app
-          user-name: 'github-actions[bot]'
-          user-email: 'github-actions[bot]@users.noreply.github.com'
-          # destination-github-username: eTF1-interne
-          # destination-repository-name: mytf1-web-front-deployment
-          # commit-message: Set `${{ inputs.deploy_target }}` image tag to `${{ inputs.version }}`
-          # target-branch: main
+      - name: Git push version bump
+        run: git push -f origin develop
 
       - id: set-version
         name: Output version change
