@@ -1,7 +1,8 @@
 name: CI
 
 on:
-  push:
+  pull_request:
+    types: [closed]
     branches:
       - staging
 
@@ -10,8 +11,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  setup:
-    uses: ./.github/workflows/echo1.yml
-
-  deploy:
-    uses: ./.github/workflows/echo.yml
+  thejob:
+    if: 'github.event.pull_request.merged == true'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "This will only show if the PR has been merged (and not if it was closed without merging)."
