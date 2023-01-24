@@ -14,3 +14,4 @@ jobs:
     needs: setup
     if: 'github.event.pull_request.merged == true'
     uses: ./.github/workflows/bump-push.yml
+    secrets: inherit
