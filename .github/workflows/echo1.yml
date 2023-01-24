@@ -7,6 +7,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Echo version
+      - name: Echo versions
         run: |
           echo hello1
