@@ -23,7 +23,7 @@ jobs:
         run: 'npm version minor -m "release: %s"'
 
       - name: Git push version bump
-        run: git push -f origin develop
+        run: git push
 
       - id: set-version
         name: Output version change
