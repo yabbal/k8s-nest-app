@@ -27,5 +27,4 @@ jobs:
     uses: ./.github/workflows/test.yml
 
   deploy:
-    if: github.event.pull_request.merged == true
     uses: ./.github/workflows/echo.yml
