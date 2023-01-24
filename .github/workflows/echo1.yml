@@ -1,0 +1,13 @@
+name: Update Deployment repository
+
+on:
+  workflow_call:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo version
+        if: github.event.pull_request.merged == true
+        run: |
+          echo hello
